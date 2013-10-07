@@ -30,8 +30,9 @@ app.configure(function(){
   //app.use(express.bodyParser());
 });
  
-app.get('/', function(request, response) {
-	response.send("AEB home page.");
+app.get('/', function(req, res) {
+	//response.send("AEB home page.");
+	res.sendfile('./view/index.html');
 });
 
 app.get('/on', function(request, response) {
