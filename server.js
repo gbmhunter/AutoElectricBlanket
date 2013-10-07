@@ -27,15 +27,29 @@ var express = require('express'),
 var app = express();
  
 app.configure(function(){
-  app.use(express.bodyParser());
+  //app.use(express.bodyParser());
+});
+ 
+app.get('/', function(request, response) {
+	response.send("AEB home page.");
+});
+
+app.get('/on', function(request, response) {
+	gpio4.set(1);
+	response.send("Electric blanket turned on.");
+});
+
+app.get('/off', function(request, response) {
+	response.send("Electric blanket turned off.");
+	gpio4.set(0);
 });
  
 // JSON API
-app.get('/switches', api.switches);
-app.get('/switches/:id', api.switch);
-app.post('/switches', api.addSwitch);
-app.put('/switches/:id', api.editSwitch);
-app.delete('/switches/:id', api.deleteSwitch);
+//app.get('/switches', api.switches);
+//app.get('/switches/:id', api.switch);
+//app.post('/switches', api.addSwitch);
+//app.put('/switches/:id', api.editSwitch);
+//app.delete('/switches/:id', api.deleteSwitch);
  
 // Start server
 app.listen(8000);
