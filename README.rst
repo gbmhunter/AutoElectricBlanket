@@ -8,8 +8,8 @@ A home automation project.
 
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - First Ever Commit: 2013/10/05
-- Last Modified: 2013/10/07
-- Version: v0.2.2.0
+- Last Modified: 2013/10/08
+- Version: v0.3.0.0
 - Company: CladLabs
 - Language: n/a
 - Compiler: n/a
@@ -45,6 +45,7 @@ Changelog
 ========= ========== ===================================================================================================
 Version   Date       Comment
 ========= ========== ===================================================================================================
+v0.3.0.0  2013/10/08 Server now serves up static pages, and can provide css and js for bootstrap-switches module. Got rid of the js folder as it was causing issues, but all js files in root dir.
 v0.2.2.0  2013/10/07 Added bootstrap switch repo. Added index.html in /view/. server.js now serves up a static web file on homepage request, however it doesn't render correctly.
 v0.2.1.0  2013/10/07 Moved node code and associated sub-directories into /js/.
 v0.2.0.0  2013/10/07 Basic on/off commands work by typing URL:8000/on or URL:8000/off once node server has started.

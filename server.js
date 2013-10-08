@@ -23,37 +23,40 @@ var gpio4 = gpio.export(4, {
 
 
 var express = require('express'),
-    api = require('./routes/api');
-var app = express();
+    api = require('./api');
+var server = express();
  
-app.configure(function(){
-  //app.use(express.bodyParser());
+server.configure(function(){
+  //server.use(express.bodyParser());
+  server.use('/bootstrap-switch', express.static(__dirname + '/bootstrap-switch'));
 });
+
+
  
-app.get('/', function(req, res) {
+server.get('/', function(req, res) {
 	//response.send("AEB home page.");
 	res.sendfile('./view/index.html');
 });
 
-app.get('/on', function(request, response) {
+server.get('/on', function(request, response) {
 	gpio4.set(1);
 	response.send("Electric blanket turned on.");
 });
 
-app.get('/off', function(request, response) {
+server.get('/off', function(request, response) {
 	response.send("Electric blanket turned off.");
 	gpio4.set(0);
 });
  
 // JSON API
-//app.get('/switches', api.switches);
-//app.get('/switches/:id', api.switch);
-//app.post('/switches', api.addSwitch);
-//app.put('/switches/:id', api.editSwitch);
-//app.delete('/switches/:id', api.deleteSwitch);
+//server.get('/switches', api.switches);
+//server.get('/switches/:id', api.switch);
+//server.post('/switches', api.addSwitch);
+//server.put('/switches/:id', api.editSwitch);
+//server.delete('/switches/:id', api.deleteSwitch);
  
 // Start server
-app.listen(8000);
+server.listen(8000);
 console.log("Server running at http://127.0.0.1:8000/");
 
 /*
