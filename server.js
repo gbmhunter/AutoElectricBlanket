@@ -1,4 +1,6 @@
 var http = require('http');
+var url  = require('url');
+
 global.pinState = 0;
 
 
@@ -29,23 +31,44 @@ var server = express();
 server.configure(function(){
   //server.use(express.bodyParser());
   server.use('/bootstrap-switch', express.static(__dirname + '/bootstrap-switch'));
+  server.use('/view', express.static(__dirname + '/view'));
 });
 
 
  
 server.get('/', function(req, res) {
 	//response.send("AEB home page.");
-	res.sendfile('./view/index.html');
+	
+	var url_parts = url.parse(req.url, true);
+    var query = url_parts.query;
+
+    console.log(query);
+	
+	if(query.state)
+	{
+		if(query.state == 'on')
+		{
+			console.log('on');
+			gpio4.set(1);
+		}
+		if(query.state == 'off')
+		{
+			console.log('off');
+			gpio4.set(0);
+		}
+	}
+	
+	//res.sendfile('./view/index.html');
 });
 
 server.get('/on', function(request, response) {
-	gpio4.set(1);
-	response.send("Electric blanket turned on.");
+	
+	//response.send("Electric blanket turned on.");
 });
 
 server.get('/off', function(request, response) {
-	response.send("Electric blanket turned off.");
-	gpio4.set(0);
+	//response.send("Electric blanket turned off.");
+	
 });
  
 // JSON API
