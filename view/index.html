@@ -14,12 +14,31 @@
 			if(document.getElementById("onoffswitch").checked)
 			{
 				//alert('On.');
-				window.location.replace('/?state=on');
+				//window.location.replace('/?state=on');
+				
+				 // When button is clicked send an AJAX request:
+				$.post("/?state=on",
+				{
+					name:"Donald Duck",
+					city:"Duckburg"
+				},
+				function(data,status){
+					//alert("Data sent successfully.");
+				});
 			}
 			else
 			{
 				//alert('Off.');
-				window.location.replace('/?state=off');
+				//window.location.replace('/?state=off');
+				 // When button is clicked send an AJAX request:
+				$.post("/?state=off",
+				{
+					name:"Donald Duck",
+					city:"Duckburg"
+				},
+				function(data,status){
+					//alert("Data sent successfully.");
+				});
 			}
 		}
 	</script>

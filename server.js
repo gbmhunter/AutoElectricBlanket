@@ -36,7 +36,7 @@ server.configure(function(){
 
 
  
-server.get('/', function(req, res) {
+server.post('/', function(req, res) {
 	//response.send("AEB home page.");
 	
 	var url_parts = url.parse(req.url, true);
@@ -57,10 +57,11 @@ server.get('/', function(req, res) {
 			gpio4.set(0);
 		}
 	}
-	
+	res.end("Done");
 	//res.sendfile('./view/index.html');
 });
 
+/*
 server.get('/on', function(request, response) {
 	
 	//response.send("Electric blanket turned on.");
@@ -70,6 +71,7 @@ server.get('/off', function(request, response) {
 	//response.send("Electric blanket turned off.");
 	
 });
+*/
  
 // JSON API
 //server.get('/switches', api.switches);
