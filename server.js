@@ -90,6 +90,24 @@ var gpioHighPwr = gpio.export(22, {
    }
 });
 
+// RELAY GPIO
+
+var gpioRelay = gpio.export(17, {
+   // When you export a pin, the default direction is out. This allows you to set
+   // the pin value to either LOW or HIGH (3.3V) from your program.
+   direction: 'out',
+
+   // set the time interval (ms) between each read when watching for value changes
+   // note: this is default to 100, setting value too low will cause high CPU usage
+   interval: 200,
+
+   // Due to the asynchronous nature of exporting a header, you may not be able to
+   // read or write to the header right away. Place your logic in this ready
+   // function to guarantee everything will get fired properly
+   ready: function() {
+   }
+});
+
 
 var express = require('express'),
     api = require('./api');
@@ -121,6 +139,7 @@ server.post('/', function(req, res) {
 			gpioLowPwr.set(1);
 			gpioMedPwr.set(1);
 			gpioHighPwr.set(1);
+			gpioRelay.set(1);
 		}
 		if(query.state == 'off')
 		{
@@ -130,6 +149,7 @@ server.post('/', function(req, res) {
 			gpioLowPwr.set(0);
 			gpioMedPwr.set(0);
 			gpioHighPwr.set(0);
+			gpioRelay.set(0);
 		}
 	}
 	
