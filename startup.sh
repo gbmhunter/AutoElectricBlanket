@@ -1,0 +1,3 @@
+#!/bin/bash
+echo startup.sh : Launching web server...
+sudo /opt/node/bin/node ~/autoeb/server.js 

@@ -87,7 +87,7 @@
 		$('#sl1').slider()
 			.on('slideStop', function(ev){
 				// When button is clicked send an AJAX request:
-				$.post("/?state=on&power=" + document.getElementById("sl1").value.toString(),
+				$.post("/?&power=" + document.getElementById("sl1").value.toString(),
 				{
 					name:"Donald Duck",
 					city:"Duckburg"
