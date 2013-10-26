@@ -3,6 +3,20 @@ var url  = require('url');
 
 global.pinState = 0;
 
+// POWER enum
+var POWER = {
+	OFF  : {value: 0, name: "Off", powerTick: 0}, 
+	LOW  : {value: 1, name: "Low", powerTick: 1}, 
+	MED  : {value: 2, name: "Medium", powerTick: 2}, 
+	HIGH : {value: 3, name: "High", powerTick: 3}
+}; 
+
+// STATE enum
+var STATE = {
+	OFF  : {value: 0, name: "Off"}, 
+	ON  : {value: 1, name: "On"}
+}; 
+
 //============= GPIO SETUP ===============//
 
 var gpio = require("gpio");
@@ -138,9 +152,7 @@ gpioSwitch.on("change", function(val) {
 		if(powerLevel == POWER.OFF)
 		{
 			powerLevel = POWER.LOW;
-			gpioLowPwr.set(1);
-			gpioMedPwr.set(0);
-			gpioHighPwr.set(0);
+		
 			
 		}
 		else if(powerLevel == POWER.LOW)
@@ -168,24 +180,22 @@ gpioSwitch.on("change", function(val) {
 	}   
 });
 
-// POWER enum
-var POWER = {
-	OFF  : {value: 0, name: "Off", powerTick: 0}, 
-	LOW  : {value: 1, name: "Low", powerTick: 1}, 
-	MED  : {value: 2, name: "Medium", powerTick: 2}, 
-	HIGH : {value: 3, name: "High", powerTick: 3}
-}; 
-
 // The current power level of the electric blanket. Off is the default.
 var powerLevel = POWER.OFF;
+
+var relayState = STATE.OFF;
 
 var express = require('express'),
     api = require('./api');
 var server = express();
  
 server.configure(function(){
-  // File system for bootstrap radio button
+  // File system for bootstrap switch (radio button)
   server.use('/bootstrap-switch', express.static(__dirname + '/bootstrap-switch'));
+  
+  // File system for bootstrap slider
+  server.use('/slider', express.static(__dirname + '/slider'));
+  
   // File system for index.html
   server.use('/view', express.static(__dirname + '/view'));
 });
@@ -198,14 +208,51 @@ function RelayControl()
 	tick++;
 	if(tick >= 3)
 		tick = 0;
-		
-	if(powerLevel.powerTick > tick)
+	
+	if(relayState == STATE.ON)
 	{
-		gpioRelay.set(1);
+		if(powerLevel == POWER.OFF)
+		{
+			gpioLowPwr.set(0);
+			gpioMedPwr.set(0);
+			gpioHighPwr.set(0);
+		}
+		else if(powerLevel == POWER.LOW)
+		{
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(0);
+			gpioHighPwr.set(0);
+		}
+		else if(powerLevel == POWER.MED)
+		{
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(1);
+			gpioHighPwr.set(0);
+		}
+		else if(powerLevel == POWER.HIGH)
+		{
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(1);
+			gpioHighPwr.set(1);
+		}
+	
+		if(powerLevel.powerTick > tick)
+		{
+			gpioRelay.set(1);
+		}
+		else
+		{
+			gpioRelay.set(0);
+			
+		}
+	
 	}
 	else
 	{
 		gpioRelay.set(0);
+		gpioLowPwr.set(0);
+		gpioMedPwr.set(0);
+		gpioHighPwr.set(0);
 	}
 		
 	//console.log(tick);
@@ -225,23 +272,25 @@ server.post('/', function(req, res) {
 		if(query.state == 'on')
 		{
 			console.log('on');
-			gpioOnline.set(1);
-			//gpioPower.set(1);
-			//gpioLowPwr.set(1);
-			//gpioMedPwr.set(1);
-			//gpioHighPwr.set(1);
-			gpioRelay.set(1);
+			relayState = STATE.ON;
 		}
 		if(query.state == 'off')
 		{
 			console.log('off');
-			gpioOnline.set(0);
-			//gpioPower.set(0);
-			//gpioLowPwr.set(0);
-			//gpioMedPwr.set(0);
-			//gpioHighPwr.set(0);
-			gpioRelay.set(0);
+			relayState = STATE.OFF;
 		}
+	}
+	
+	if(query.power)
+	{
+		if(query.power == 0)
+			powerLevel = POWER.OFF;
+		else if(query.power == 1)
+			powerLevel = POWER.LOW;
+		else if(query.power == 2)
+			powerLevel = POWER.MED;
+		else if(query.power == 3)
+			powerLevel = POWER.HIGH;
 	}
 	
 	// Have to send something, otherwise client browser treats it as a failed communication
