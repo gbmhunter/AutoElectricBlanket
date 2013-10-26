@@ -10,7 +10,7 @@ var gpio = require("gpio");
 // ONLINE LED (OUTPUT)
 
 // Calling export with a pin number will export that header and return a gpio header instance
-var gpioOnline = gpio.export(4, {
+var gpioOnline = gpio.export(25, {
    // When you export a pin, the default direction is out. This allows you to set
    // the pin value to either LOW or HIGH (3.3V) from your program.
    direction: 'out',
@@ -28,7 +28,7 @@ var gpioOnline = gpio.export(4, {
 
 // POWER LED (OUTPUT)
 
-var gpioPower = gpio.export(25, {
+var gpioPower = gpio.export(4, {
    // When you export a pin, the default direction is out. This allows you to set
    // the pin value to either LOW or HIGH (3.3V) from your program.
    direction: 'out',
@@ -114,7 +114,7 @@ var gpioRelay = gpio.export(17, {
 
 // PUSH-BUTTON SWITCH (INPUT)
 
-var gpioRelay = gpio.export(18, {
+var gpioSwitch = gpio.export(18, {
    // When you export a pin, the default direction is out. This allows you to set
    // the pin value to either LOW or HIGH (3.3V) from your program.
    direction: 'in',
@@ -131,23 +131,87 @@ var gpioRelay = gpio.export(18, {
 }); 
 
 // Bind to the "change" event
-gpioRelay.on("change", function(val) {
-   // value will report either 1 or 0 (number) when the value changes
-   gpioHighPwr.set(val);
+gpioSwitch.on("change", function(val) {
+	// val will be one when pushed down, zero when released
+	if(val == 1)
+	{
+		if(powerLevel == POWER.OFF)
+		{
+			powerLevel = POWER.LOW;
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(0);
+			gpioHighPwr.set(0);
+			
+		}
+		else if(powerLevel == POWER.LOW)
+		{
+			powerLevel = POWER.MED;
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(1);
+			gpioHighPwr.set(0);
+		}
+		else if(powerLevel == POWER.MED)
+		{
+			powerLevel = POWER.HIGH;
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(1);
+			gpioHighPwr.set(1);
+		}
+		else if(powerLevel == POWER.HIGH)
+		{
+			powerLevel = POWER.OFF;
+			gpioLowPwr.set(0);
+			gpioMedPwr.set(0);
+			gpioHighPwr.set(0);
+		}
+		
+	}   
 });
+
+// POWER enum
+var POWER = {
+	OFF  : {value: 0, name: "Off", powerTick: 0}, 
+	LOW  : {value: 1, name: "Low", powerTick: 1}, 
+	MED  : {value: 2, name: "Medium", powerTick: 2}, 
+	HIGH : {value: 3, name: "High", powerTick: 3}
+}; 
+
+// The current power level of the electric blanket. Off is the default.
+var powerLevel = POWER.OFF;
 
 var express = require('express'),
     api = require('./api');
 var server = express();
  
 server.configure(function(){
-  //server.use(express.bodyParser());
+  // File system for bootstrap radio button
   server.use('/bootstrap-switch', express.static(__dirname + '/bootstrap-switch'));
+  // File system for index.html
   server.use('/view', express.static(__dirname + '/view'));
 });
 
+var tick = 0;
 
- 
+// Called once per second
+function RelayControl()
+{
+	tick++;
+	if(tick >= 3)
+		tick = 0;
+		
+	if(powerLevel.powerTick > tick)
+	{
+		gpioRelay.set(1);
+	}
+	else
+	{
+		gpioRelay.set(0);
+	}
+		
+	//console.log(tick);
+}
+
+// Called if info is posted to the root URL
 server.post('/', function(req, res) {
 	//response.send("AEB home page.");
 	
@@ -162,9 +226,9 @@ server.post('/', function(req, res) {
 		{
 			console.log('on');
 			gpioOnline.set(1);
-			gpioPower.set(1);
-			gpioLowPwr.set(1);
-			gpioMedPwr.set(1);
+			//gpioPower.set(1);
+			//gpioLowPwr.set(1);
+			//gpioMedPwr.set(1);
 			//gpioHighPwr.set(1);
 			gpioRelay.set(1);
 		}
@@ -172,9 +236,9 @@ server.post('/', function(req, res) {
 		{
 			console.log('off');
 			gpioOnline.set(0);
-			gpioPower.set(0);
-			gpioLowPwr.set(0);
-			gpioMedPwr.set(0);
+			//gpioPower.set(0);
+			//gpioLowPwr.set(0);
+			//gpioMedPwr.set(0);
 			//gpioHighPwr.set(0);
 			gpioRelay.set(0);
 		}
@@ -185,28 +249,16 @@ server.post('/', function(req, res) {
 	//res.sendfile('./view/index.html');
 });
 
-/*
-server.get('/on', function(request, response) {
-	
-	//response.send("Electric blanket turned on.");
-});
 
-server.get('/off', function(request, response) {
-	//response.send("Electric blanket turned off.");
-	
-});
-*/
- 
-// JSON API
-//server.get('/switches', api.switches);
-//server.get('/switches/:id', api.switch);
-//server.post('/switches', api.addSwitch);
-//server.put('/switches/:id', api.editSwitch);
-//server.delete('/switches/:id', api.deleteSwitch);
  
 // Start server
 server.listen(8000);
 console.log("Server running at http://127.0.0.1:8000/");
+
+// Start relay control
+setInterval(RelayControl, 1000);
+
+//============= GRAVEYARD ===============//
 
 /*
 http.createServer( function(req, res)
@@ -246,4 +298,23 @@ http.createServer( function(req, res)
 	
 
 }).listen('8124');
+
+server.get('/on', function(request, response) {
+	
+	//response.send("Electric blanket turned on.");
+});
+
+server.get('/off', function(request, response) {
+	//response.send("Electric blanket turned off.");
+	
+});
+
+ 
+// JSON API
+//server.get('/switches', api.switches);
+//server.get('/switches/:id', api.switch);
+//server.post('/switches', api.addSwitch);
+//server.put('/switches/:id', api.editSwitch);
+//server.delete('/switches/:id', api.deleteSwitch);
+
 */
