@@ -9,7 +9,7 @@ A home automation project.
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - First Ever Commit: 2013/10/05
 - Last Modified: 2013/10/26
-- Version: v0.6.2.0
+- Version: v0.6.3.0
 - Company: CladLabs
 - Language: n/a
 - Compiler: n/a
@@ -45,6 +45,7 @@ Changelog
 ========= ========== ===================================================================================================
 Version   Date       Comment
 ========= ========== ===================================================================================================
+v0.6.3.0  2013/10/26 Push button now turns the high power LED on/off (just for testing).
 v0.6.2.0  2013/10/26 Relay is controllable (on/off) with variable gpioRelay in server.js.
 v0.6.1.0  2013/10/26 GPIO for power levels, power itself, and when server is online have been added to script. Turns on all LEDs at once when on/off button is pressed on website.
 v0.6.0.0  2013/10/14 Android app now loads RaspberryPi web page (internal IP address of 192.168.8.113:8000/view/index.html), sliding button (Twitter style) works fine, and you are able to turn the LED on/off correctly.
