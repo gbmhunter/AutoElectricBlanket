@@ -3,11 +3,78 @@ var url  = require('url');
 
 global.pinState = 0;
 
+//============= GPIO SETUP ===============//
 
 var gpio = require("gpio");
 
 // Calling export with a pin number will export that header and return a gpio header instance
-var gpio4 = gpio.export(4, {
+var gpioOnline = gpio.export(4, {
+   // When you export a pin, the default direction is out. This allows you to set
+   // the pin value to either LOW or HIGH (3.3V) from your program.
+   direction: 'out',
+
+   // set the time interval (ms) between each read when watching for value changes
+   // note: this is default to 100, setting value too low will cause high CPU usage
+   interval: 200,
+
+   // Due to the asynchronous nature of exporting a header, you may not be able to
+   // read or write to the header right away. Place your logic in this ready
+   // function to guarantee everything will get fired properly
+   ready: function() {
+   }
+});
+
+var gpioPower = gpio.export(25, {
+   // When you export a pin, the default direction is out. This allows you to set
+   // the pin value to either LOW or HIGH (3.3V) from your program.
+   direction: 'out',
+
+   // set the time interval (ms) between each read when watching for value changes
+   // note: this is default to 100, setting value too low will cause high CPU usage
+   interval: 200,
+
+   // Due to the asynchronous nature of exporting a header, you may not be able to
+   // read or write to the header right away. Place your logic in this ready
+   // function to guarantee everything will get fired properly
+   ready: function() {
+   }
+});
+
+// POWER LEVEL GPIO
+
+var gpioLowPwr = gpio.export(24, {
+   // When you export a pin, the default direction is out. This allows you to set
+   // the pin value to either LOW or HIGH (3.3V) from your program.
+   direction: 'out',
+
+   // set the time interval (ms) between each read when watching for value changes
+   // note: this is default to 100, setting value too low will cause high CPU usage
+   interval: 200,
+
+   // Due to the asynchronous nature of exporting a header, you may not be able to
+   // read or write to the header right away. Place your logic in this ready
+   // function to guarantee everything will get fired properly
+   ready: function() {
+   }
+});
+
+var gpioMedPwr = gpio.export(23, {
+   // When you export a pin, the default direction is out. This allows you to set
+   // the pin value to either LOW or HIGH (3.3V) from your program.
+   direction: 'out',
+
+   // set the time interval (ms) between each read when watching for value changes
+   // note: this is default to 100, setting value too low will cause high CPU usage
+   interval: 200,
+
+   // Due to the asynchronous nature of exporting a header, you may not be able to
+   // read or write to the header right away. Place your logic in this ready
+   // function to guarantee everything will get fired properly
+   ready: function() {
+   }
+});
+
+var gpioHighPwr = gpio.export(22, {
    // When you export a pin, the default direction is out. This allows you to set
    // the pin value to either LOW or HIGH (3.3V) from your program.
    direction: 'out',
@@ -49,14 +116,24 @@ server.post('/', function(req, res) {
 		if(query.state == 'on')
 		{
 			console.log('on');
-			gpio4.set(1);
+			gpioOnline.set(1);
+			gpioPower.set(1);
+			gpioLowPwr.set(1);
+			gpioMedPwr.set(1);
+			gpioHighPwr.set(1);
 		}
 		if(query.state == 'off')
 		{
 			console.log('off');
-			gpio4.set(0);
+			gpioOnline.set(0);
+			gpioPower.set(0);
+			gpioLowPwr.set(0);
+			gpioMedPwr.set(0);
+			gpioHighPwr.set(0);
 		}
 	}
+	
+	// Have to send something, otherwise client browser treats it as a failed communication
 	res.end("Done");
 	//res.sendfile('./view/index.html');
 });
