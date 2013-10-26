@@ -149,34 +149,24 @@ gpioSwitch.on("change", function(val) {
 	// val will be one when pushed down, zero when released
 	if(val == 1)
 	{
+		// Always go to on state if push button is pressed.
+		relayState = STATE.ON;
 		if(powerLevel == POWER.OFF)
 		{
 			powerLevel = POWER.LOW;
-		
-			
 		}
 		else if(powerLevel == POWER.LOW)
 		{
 			powerLevel = POWER.MED;
-			gpioLowPwr.set(1);
-			gpioMedPwr.set(1);
-			gpioHighPwr.set(0);
 		}
 		else if(powerLevel == POWER.MED)
 		{
 			powerLevel = POWER.HIGH;
-			gpioLowPwr.set(1);
-			gpioMedPwr.set(1);
-			gpioHighPwr.set(1);
 		}
 		else if(powerLevel == POWER.HIGH)
 		{
 			powerLevel = POWER.OFF;
-			gpioLowPwr.set(0);
-			gpioMedPwr.set(0);
-			gpioHighPwr.set(0);
 		}
-		
 	}   
 });
 
@@ -254,7 +244,10 @@ function RelayControl()
 		gpioMedPwr.set(0);
 		gpioHighPwr.set(0);
 	}
-		
+	
+	// Set the online LED on
+	gpioOnline.set(1);
+	//gpioPower.set(1);
 	//console.log(tick);
 }
 
@@ -298,8 +291,6 @@ server.post('/', function(req, res) {
 	//res.sendfile('./view/index.html');
 });
 
-
- 
 // Start server
 server.listen(8000);
 console.log("Server running at http://127.0.0.1:8000/");
