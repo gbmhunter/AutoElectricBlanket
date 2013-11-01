@@ -245,8 +245,7 @@ function RelayControl()
 		gpioHighPwr.set(0);
 	}
 	
-	// Set the online LED on
-	gpioOnline.set(1);
+	
 	//gpioPower.set(1);
 	//console.log(tick);
 }
@@ -297,6 +296,27 @@ console.log("Server running at http://127.0.0.1:8000/");
 
 // Start relay control
 setInterval(RelayControl, 1000);
+
+// Start connectivity checker
+setInterval(ConnectivityChecker, 5000);
+
+function ConnectivityChecker()
+{
+	require('dns').resolve('www.google.com', function(err) {
+		if (err)
+		{
+			// no connection
+			// Set the online LED on
+			gpioOnline.set(0);
+		}
+		else
+		{
+			// connection
+			// Set the online LED on
+			gpioOnline.set(1);
+		}
+	});
+}
 
 //============= GRAVEYARD ===============//
 

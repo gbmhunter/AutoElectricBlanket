@@ -8,8 +8,8 @@ A home automation project.
 
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - First Ever Commit: 2013/10/05
-- Last Modified: 2013/10/26
-- Version: v0.9.1.0
+- Last Modified: 2013/11/01
+- Version: v0.9.2.0
 - Company: CladLabs
 - Language: n/a
 - Compiler: n/a
@@ -45,6 +45,7 @@ Changelog
 ========= ========== ===================================================================================================
 Version   Date       Comment
 ========= ========== ===================================================================================================
+v0.9.2.0  2013/11/01 Online LED now checks that it can resolve google.com every 5s, and if not, turns off, giving a more accurate indication of whether the device is connected to the internet or not.
 v0.9.1.0  2013/10/26 Online LED now lights up when the server starts.
 v0.9.0.0  2013/10/26 Web server on RaspberryPi now starts up automatically on boot-up. Added startup.sh for this purpose.
 v0.8.0.0  2013/10/26 Electric blanket can now be controlled via web interface with 4 different power levels. Added bootstrap-slider which is a slider element for the web page, with touch support.
