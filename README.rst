@@ -9,7 +9,7 @@ A home automation project.
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - First Ever Commit: 2013/10/05
 - Last Modified: 2013/11/07
-- Version: v1.0.0.0
+- Version: v1.0.0.1
 - Company: CladLabs
 - Language: n/a
 - Compiler: n/a
@@ -22,7 +22,7 @@ A home automation project.
 Description
 ===========
 
-n/a
+The Android app can be installed by copying the .apk (android/workspace/AutoElectricBlanket/bin/AutoElectricBlanket.apk) file onto your phone, and then running the APK installer app (that can be downloaded from Google Play).
 
 External Dependencies
 =====================
@@ -45,6 +45,7 @@ Changelog
 ========= ========== ===================================================================================================
 Version   Date       Comment
 ========= ========== ===================================================================================================
+v1.0.0.1  2013/11/07 Added installation info about the Android app to the README.
 v1.0.0.0  2013/11/07 Code released as v1.0.0.0. 
 v0.9.4.0  2013/11/07 Changed index.html URL so that it loads when going to root web site address. Fixed Android app URL so it points to the DynamicDNS URL.
 v0.9.3.0  2013/11/06 Increase switch input GPIO check time to make it more responsive to presses.
