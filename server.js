@@ -187,7 +187,7 @@ server.configure(function(){
   server.use('/slider', express.static(__dirname + '/slider'));
   
   // File system for index.html
-  server.use('/view', express.static(__dirname + '/view'));
+  server.use('/', express.static(__dirname + '/view'));
 });
 
 var tick = 0;
