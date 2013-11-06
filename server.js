@@ -135,7 +135,7 @@ var gpioSwitch = gpio.export(18, {
 
    // set the time interval (ms) between each read when watching for value changes
    // note: this is default to 100, setting value too low will cause high CPU usage
-   interval: 200,
+   interval: 50,
 
    // Due to the asynchronous nature of exporting a header, you may not be able to
    // read or write to the header right away. Place your logic in this ready
