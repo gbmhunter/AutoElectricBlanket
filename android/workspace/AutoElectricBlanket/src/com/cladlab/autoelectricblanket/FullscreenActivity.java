@@ -51,7 +51,7 @@ public class FullscreenActivity extends Activity {
 
     /** Opens the URL in a browser */
    private void openURL() {
-       webview.loadUrl("http://aeb.flashserv.net:8000/");
+       webview.loadUrl("http://aeb.flashserv.net:8001/");
 	   //webview.loadUrl("http://www.google.com");
        webview.requestFocus();
    }

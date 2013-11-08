@@ -291,8 +291,8 @@ server.post('/', function(req, res) {
 });
 
 // Start server
-server.listen(8000);
-console.log("Server running at http://127.0.0.1:8000/");
+server.listen(8001);
+console.log("Server running at http://127.0.0.1:8001/");
 
 // Start relay control
 setInterval(RelayControl, 1000);

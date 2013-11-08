@@ -8,8 +8,8 @@ A home automation project.
 
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - First Ever Commit: 2013/10/05
-- Last Modified: 2013/11/07
-- Version: v1.0.0.1
+- Last Modified: 2013/11/09
+- Version: v1.0.1.0
 - Company: CladLabs
 - Language: n/a
 - Compiler: n/a
@@ -45,6 +45,7 @@ Changelog
 ========= ========== ===================================================================================================
 Version   Date       Comment
 ========= ========== ===================================================================================================
+v1.0.1.0  2013/11/09 Changed the port from 8000 to 8001 as 8000 was being used by a 'USB server' on the Orcon router. Updated both the web app and the Android app with this change. Added the command 'sudo ifup wlan0' to the startup script, as this fixed issues with getting a static IP on the RaspberryPi (after configuring etc/network/interfaces with the required information).
 v1.0.0.1  2013/11/07 Added installation info about the Android app to the README.
 v1.0.0.0  2013/11/07 Code released as v1.0.0.0. 
 v0.9.4.0  2013/11/07 Changed index.html URL so that it loads when going to root web site address. Fixed Android app URL so it points to the DynamicDNS URL.
